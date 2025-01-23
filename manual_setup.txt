@@ -77,9 +77,13 @@ sudo nano /etc/hosts
 # 9️⃣ (Optional) Configure Cloud-Init
 # If your server uses Cloud-Init, you can make hostname changes persistent:
 sudo nano /etc/cloud/cloud.cfg
+nano /etc/cloud/templates/hosts.debian.tmpl
 
 # 🔸 In the file, find the line `preserve_hostname: false` and change it to:
-# preserve_hostname: no
+# preserve_hostname: false
+# manage_etc_hosts: false
+sudo cloud-init clean
+sudo cloud-init init
 # 🔸 Save and exit (CTRL+O, ENTER, CTRL+X).
 
 # 🔟 (Optional) Install Docker

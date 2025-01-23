@@ -42,6 +42,7 @@ sudo systemctl start fail2ban
 
 # (Optional) Edit Fail2Ban settings:
 sudo nano /etc/fail2ban/jail.local
+sudo fail2ban-client status
 
 # 7️⃣ Install UFW (Firewall) and Configure Rules
 # Install UFW:

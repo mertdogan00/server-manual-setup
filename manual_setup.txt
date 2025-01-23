@@ -79,7 +79,7 @@ sudo nano /etc/hosts
 sudo nano /etc/cloud/cloud.cfg
 
 # 🔸 In the file, find the line `preserve_hostname: false` and change it to:
-# preserve_hostname: true
+# preserve_hostname: no
 # 🔸 Save and exit (CTRL+O, ENTER, CTRL+X).
 
 # 🔟 (Optional) Install Docker

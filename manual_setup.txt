@@ -58,7 +58,7 @@ sudo ufw allow ssh
 # Enable UFW:
 sudo ufw enable
 
-# 4️⃣ Show UFW status (Verbose)
+# Show UFW status (Verbose)
 # Verify the applied rules with a detailed status report.
 echo "Checking UFW status with verbose output..."
 sudo ufw status verbose

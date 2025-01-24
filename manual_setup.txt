@@ -1,124 +1,154 @@
-# 1️⃣ Update and Upgrade the System
-# Keep your system up-to-date by running this command.
+# 🌐 Complete Server Setup Guide 🎯
+# Follow these steps to configure your Linux server with Zsh, Oh-My-Zsh, Fail2Ban, UFW, and Docker. 
+
+---
+
+## 1️⃣ Update and Upgrade the System
+# 🛠️ Keep your system up-to-date by running this command:
 sudo apt update && sudo apt upgrade -y
 
-# 2️⃣ Install Zsh and Make It Default
-# Install Zsh:
+---
+
+## 2️⃣ Install Zsh and Make It Default
+# 🐚 Install Zsh:
 sudo apt install -y zsh curl git
 
-# Make Zsh the default shell:
+# 🔧 Make Zsh the default shell:
 chsh -s $(which zsh)
 
-# 3️⃣ Install Oh-My-Zsh
-# Oh-My-Zsh is a popular framework for managing Zsh configuration. Install it with:
+---
+
+## 3️⃣ Install Oh-My-Zsh
+# ⚡ Oh-My-Zsh is a powerful framework for Zsh. Install it with:
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
-# 4️⃣ Set the Agnoster Theme
-# Open the .zshrc file to configure the theme:
+---
+
+## 4️⃣ Set the Agnoster Theme
+# 🎨 Open the `.zshrc` file to configure the theme:
 nano ~/.zshrc
 
-# 🔸 In the file, find the line starting with ZSH_THEME= and change it to:
+# 🔸 In the file, find the line starting with `ZSH_THEME=` and change it to:
 # ZSH_THEME="agnoster"
-# 🔸 Save and exit (CTRL+O, ENTER, CTRL+X).
 
-# Reload Zsh to apply the changes:
+# ✅ Save and exit (CTRL+O, ENTER, CTRL+X).
+
+# 🔄 Reload Zsh to apply the changes:
 source ~/.zshrc
 
-# 5️⃣ Install Powerline Fonts (for Agnoster Theme)
-# Download and install Powerline fonts with these commands:
+---
+
+## 5️⃣ Install Powerline Fonts (for Agnoster Theme)
+# 🖋️ Download and install Powerline fonts:
 git clone https://github.com/powerline/fonts.git --depth=1
 cd fonts
 ./install.sh
 cd ..
 rm -rf fonts
 
-# 6️⃣ Install Fail2Ban
-# Fail2Ban protects your server from brute-force attacks. Install it with:
+---
+
+## 6️⃣ Install Fail2Ban
+# 🔐 Fail2Ban protects your server from brute-force attacks. Install it with:
 sudo apt install -y fail2ban
 
-# Enable and start Fail2Ban:
+# 🟢 Enable and start Fail2Ban:
 sudo systemctl enable fail2ban
 sudo systemctl start fail2ban
 
-# (Optional) Edit Fail2Ban settings:
+# ⚙️ (Optional) Edit Fail2Ban settings:
 sudo nano /etc/fail2ban/jail.local
+
+# 📊 Check Fail2Ban status:
 sudo fail2ban-client status
 
-# 7️⃣ Install UFW (Firewall) and Configure Rules
-# Install UFW:
+---
+
+## 7️⃣ Install UFW (Firewall) and Configure Rules
+# 🛡️ Install UFW:
 sudo apt install -y ufw
 
-# Set default rules for UFW:
+# 🔧 Set default UFW rules:
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
 
-# Allow SSH traffic:
+# ✅ Allow SSH traffic:
 sudo ufw allow ssh
 
-# Enable UFW:
+# 🔒 Enable UFW:
 sudo ufw enable
 
-# Show UFW status (Verbose)
-# Verify the applied rules with a detailed status report.
-echo "Checking UFW status with verbose output..."
+# 📊 Show UFW status (Verbose):
 sudo ufw status verbose
 
-# 8️⃣ Update Hostname
-# Update the server's hostname with the following command:
+---
+
+## 8️⃣ Update Hostname
+# 🖥️ Update the server's hostname:
 read -p "Enter the new hostname: " NEW_HOSTNAME
 sudo hostnamectl set-hostname "$NEW_HOSTNAME"
 
-# Edit the /etc/hostname file and replace the content with the new hostname:
+# ✏️ Edit the `/etc/hostname` file and replace its content with the new hostname:
 sudo nano /etc/hostname
 
-# Edit the /etc/hosts file to update the hostname mapping:
+# ✏️ Edit the `/etc/hosts` file to update the hostname mapping:
 sudo nano /etc/hosts
 
-# 9️⃣ (Optional) Configure Cloud-Init
-# If your server uses Cloud-Init, you can make hostname changes persistent:
+---
+
+## 9️⃣ (Optional) Configure Cloud-Init
+# ☁️ If your server uses Cloud-Init, make hostname changes persistent:
 sudo nano /etc/cloud/cloud.cfg
-nano /etc/cloud/templates/hosts.debian.tmpl
 
 # 🔸 In the file, find the line `preserve_hostname: false` and change it to:
-# preserve_hostname: false
-# manage_etc_hosts: false
+# preserve_hostname: true
+
+# 🚿 Clean and reinitialize Cloud-Init:
 sudo cloud-init clean
 sudo cloud-init init
-# 🔸 Save and exit (CTRL+O, ENTER, CTRL+X).
 
-# 🔟 (Optional) Install Docker
-# Remove conflicting packages:
+---
+
+## 🔟 (Optional) Install Docker
+# 🐳 Docker is a platform for containerized applications.
+
+# 🔧 Remove conflicting packages:
 for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do
   sudo apt-get remove -y $pkg || true
 done
 
-# Install Docker prerequisites:
+# 🟢 Install Docker prerequisites:
 sudo apt-get update
 sudo apt-get install -y ca-certificates curl
 
-# Add Docker's official GPG key:
+# 🔑 Add Docker's official GPG key:
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
 sudo chmod a+r /etc/apt/keyrings/docker.asc
 
-# Add Docker's repository:
+# 📦 Add Docker's repository:
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
 $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-# Install Docker:
+# 🛠️ Install Docker:
 sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-# Enable and start Docker:
+# 🟢 Enable and start Docker:
 sudo systemctl enable docker
 sudo systemctl start docker
 
-# Add your user to the Docker group:
+# 👤 Add your user to the Docker group (logout and login for it to take effect):
 sudo usermod -aG docker $USER
 
-# Verify Docker installation:
+# ✅ Verify Docker installation:
 docker --version
 
-# 🎉 Reboot the server to apply all changes:
-sudo apt autoremove --purge
+---
+
+## 🔁 Final Step: Reboot and Clean Up
+# ✨ Clean up unnecessary packages:
+sudo apt autoremove --purge -y
+
+# 🔄 Reboot the server to apply all changes:
 sudo reboot

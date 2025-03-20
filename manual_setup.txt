@@ -49,6 +49,21 @@ rm -rf fonts
 ---
 
 ## 6️⃣ Install Fail2Ban
+🔹 Prerequisite: Install Rsyslog (if not installed)
+Fail2Ban requires log files (e.g., `/var/log/auth.log`) to function properly.  
+Some minimal Debian installations do not include `rsyslog` by default.  
+To ensure logs are available, install and enable rsyslog first:  
+
+# Install rsyslog if it’s not installed
+sudo apt update && sudo apt install -y rsyslog  
+
+# Enable and start rsyslog service
+sudo systemctl enable rsyslog  
+sudo systemctl start rsyslog  
+
+# Verify rsyslog is running
+sudo systemctl status rsyslog 
+
 # 🔐 Fail2Ban protects your server from brute-force attacks. Install it with:
 sudo apt install -y fail2ban
 

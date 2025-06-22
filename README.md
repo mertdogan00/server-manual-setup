@@ -6,15 +6,15 @@
 
 ## 📚 Table of Contents
 
-- [Update and Upgrade the System](#update-and-upgrade-the-system)
-- [Install Zsh and Make It Default](#install-zsh-and-make-it-default)
-- [Install Powerline Fonts for Agnoster Theme](#install-powerline-fonts-for-agnoster-theme)
-- [Install Fail2Ban](#install-fail2ban)
-- [Install UFW Firewall and Configure Rules](#install-ufw-firewall-and-configure-rules)
-- [Update Hostname](#update-hostname)
-- [Optional: Configure Cloud-Init](#optional-configure-cloud-init)
-- [Optional: Install Docker](#optional-install-docker)
-- [Final Step: Reboot and Clean Up](#final-step-reboot-and-clean-up)
+- [Update and Upgrade the System](#-update-and-upgrade-the-system)
+- [Install Zsh and Make It Default](#-install-zsh-and-make-it-default)
+- [Install Powerline Fonts for Agnoster Theme](#-install-powerline-fonts-for-agnoster-theme)
+- [Install Fail2Ban](#-install-fail2ban)
+- [Install UFW Firewall and Configure Rules](#-install-ufw-firewall-and-configure-rules)
+- [Update Hostname](#-update-hostname)
+- [Optional: Configure Cloud-Init](#-optional-configure-cloud-init)
+- [Optional: Install Docker](#-optional-install-docker)
+- [Final Step: Reboot and Clean Up](#-final-step-reboot-and-clean-up)
 
 ---
 

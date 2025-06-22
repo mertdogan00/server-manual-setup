@@ -98,7 +98,7 @@ sudo ufw status verbose
 
 ---
 
-## 🖥️ Update Hostname
+## 🖥 Update Hostname
 
 ```bash
 read -p "Enter the new hostname: " NEW_HOSTNAME
@@ -109,7 +109,7 @@ sudo nano /etc/hosts
 
 ---
 
-## ☁️ Optional: Configure Cloud-Init
+## ☁ Optional: Configure Cloud-Init
 
 ```bash
 sudo nano /etc/cloud/cloud.cfg
@@ -169,7 +169,7 @@ docker --version
 
 ---
 
-## ♻️ Final Step: Reboot and Clean Up
+## ♻ Final Step: Reboot and Clean Up
 
 ```bash
 sudo apt autoremove --purge -y

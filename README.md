@@ -1,56 +1,188 @@
-# Server Setup Manual 🛠️
+# 🌐 Complete Linux Server Setup Guide 🛠️
 
-This repository contains a detailed, manual, step-by-step guide for setting up a Linux server.  
-Follow this guide to configure essential tools like Zsh, Oh-My-Zsh, Docker, Fail2Ban, and UFW, along with hostname and Cloud-Init configurations.
-
-## Features
-- **System Update & Upgrade**: Keep your server up-to-date.
-- **Zsh Installation**: Install and configure Zsh with the Agnoster theme.
-- **Oh-My-Zsh Framework**: Enhance your Zsh experience.
-- **Fail2Ban**: Protect your server from brute-force attacks.
-- **UFW**: Set up a basic firewall.
-- **Hostname Configuration**: Easily update the server's hostname.
-- **Optional Docker Installation**: Install Docker and related tools for containerized applications.
-- **Cloud-Init Support**: Configure Cloud-Init to preserve hostname changes.
+*A powerful all-in-one guide to bootstrap, harden, and optimize your Linux server* 🚀
 
 ---
 
-## How to Use
+## 📚 Table of Contents
 
-1. Copy the content of `manual_setup.txt` to your server.
-2. Follow each step sequentially by copying and pasting the commands into your terminal.
-3. Optional steps like Docker installation and Cloud-Init configuration are clearly marked.
-
----
-
-## Steps Included
-
-- Update and upgrade the system
-- Install Zsh and make it the default shell
-- Install and configure Oh-My-Zsh with the Agnoster theme
-- Install Powerline fonts for enhanced visuals
-- Install Fail2Ban for security
-- Install and configure UFW for basic firewall rules
-- Update hostname and `/etc/hosts`
-- Optional: Install Docker and configure it
-- Optional: Cloud-Init configuration
+- [Update and Upgrade the System](#update-and-upgrade-the-system)
+- [Install Zsh and Make It Default](#install-zsh-and-make-it-default)
+- [Install Powerline Fonts for Agnoster Theme](#install-powerline-fonts-for-agnoster-theme)
+- [Install Fail2Ban](#install-fail2ban)
+- [Install UFW Firewall and Configure Rules](#install-ufw-firewall-and-configure-rules)
+- [Update Hostname](#update-hostname)
+- [Optional: Configure Cloud-Init](#optional-configure-cloud-init)
+- [Optional: Install Docker](#optional-install-docker)
+- [Final Step: Reboot and Clean Up](#final-step-reboot-and-clean-up)
 
 ---
 
-## File Description
+## 🧱 Update and Upgrade the System
 
-- **`manual_setup.txt`**: Contains all the manual steps in a clear, copy-paste-ready format.
-- **`README.md`**: This file explains the purpose and usage of the repository.
-
----
-
-## Contributing
-
-Feel free to submit pull requests if you'd like to add more features or improve the guide.
+```bash
+sudo apt update && sudo apt upgrade -y
+```
 
 ---
 
-## License
+## 🐚 Install Zsh and Make It Default
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+```bash
+sudo apt install -y zsh curl git
+chsh -s $(which zsh)
+```
 
+---
+
+## 🎨 Install Powerline Fonts for Agnoster Theme
+
+```bash
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+```
+
+Then edit your `~/.zshrc` file and set:
+```
+ZSH_THEME="agnoster"
+```
+
+Reload:
+```bash
+source ~/.zshrc
+```
+
+Install fonts:
+```bash
+git clone https://github.com/powerline/fonts.git --depth=1
+cd fonts
+./install.sh
+cd ..
+rm -rf fonts
+```
+
+---
+
+## 🔐 Install Fail2Ban
+
+Make sure `rsyslog` is installed:
+
+```bash
+sudo apt install -y rsyslog
+sudo systemctl enable --now rsyslog
+```
+
+Then install Fail2Ban:
+
+```bash
+sudo apt install -y fail2ban
+sudo systemctl enable --now fail2ban
+```
+
+Check status:
+```bash
+sudo fail2ban-client status
+```
+
+---
+
+## 🔥 Install UFW Firewall and Configure Rules
+
+```bash
+sudo apt install -y ufw
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow ssh
+sudo ufw enable
+sudo ufw status verbose
+```
+
+---
+
+## 🖥️ Update Hostname
+
+```bash
+read -p "Enter the new hostname: " NEW_HOSTNAME
+sudo hostnamectl set-hostname "$NEW_HOSTNAME"
+sudo nano /etc/hostname
+sudo nano /etc/hosts
+```
+
+---
+
+## ☁️ Optional: Configure Cloud-Init
+
+```bash
+sudo nano /etc/cloud/cloud.cfg
+```
+
+Set:
+```
+preserve_hostname: true
+```
+
+Then run:
+```bash
+sudo cloud-init clean
+sudo cloud-init init
+```
+
+---
+
+## 🐳 Optional: Install Docker
+
+Remove old Docker versions:
+```bash
+for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do
+  sudo apt-get remove -y $pkg || true
+done
+```
+
+Install Docker:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+echo \
+"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] \
+https://download.docker.com/linux/ubuntu \
+$(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
+| sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+Enable and start:
+```bash
+sudo systemctl enable --now docker
+sudo usermod -aG docker $USER
+```
+
+Check:
+```bash
+docker --version
+```
+
+---
+
+## ♻️ Final Step: Reboot and Clean Up
+
+```bash
+sudo apt autoremove --purge -y
+sudo reboot
+```
+
+---
+
+✅ Also check:  
+👉 [Certbot SSL Setup (Let's Encrypt)](https://github.com/mertdogan00/certbot-self-hosted-ssl)  
+
+---
+## 🪪 License 📜
+
+This project is licensed under the MIT License.  
+See the [LICENSE](./LICENSE) file for details.

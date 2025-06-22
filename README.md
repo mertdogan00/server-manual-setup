@@ -8,7 +8,8 @@
 
 - [Update and Upgrade the System](#-update-and-upgrade-the-system)
 - [Install Zsh and Make It Default](#-install-zsh-and-make-it-default)
-- [Install Powerline Fonts for Agnoster Theme](#-install-powerline-fonts-for-agnoster-theme)
+- [Install and Configure Oh My Zsh](#-install-and-configure-oh-my-zsh)
+- [Install Zsh Plugins](#-install-zsh-plugins)
 - [Install Fail2Ban](#-install-fail2ban)
 - [Install UFW Firewall and Configure Rules](#-install-ufw-firewall-and-configure-rules)
 - [Update Hostname](#-update-hostname)
@@ -35,15 +36,17 @@ chsh -s $(which zsh)
 
 ---
 
-## 🎨 Install Powerline Fonts for Agnoster Theme
+## 🎨 Install and Configure Oh My Zsh
 
+Install Oh My Zsh:
 ```bash
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 ```
 
-Then edit your `~/.zshrc` file and set:
-```
-ZSH_THEME="agnoster"
+Set theme and plugins in `~/.zshrc`:
+```bash
+ZSH_THEME="bira"
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting zsh-autocomplete)
 ```
 
 Reload:
@@ -51,13 +54,20 @@ Reload:
 source ~/.zshrc
 ```
 
-Install fonts:
+---
+
+## ✨ Install Zsh Plugins
+
+Install required plugins:
 ```bash
-git clone https://github.com/powerline/fonts.git --depth=1
-cd fonts
-./install.sh
-cd ..
-rm -rf fonts
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+git clone https://github.com/marlonrichert/zsh-autocomplete.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autocomplete
+```
+
+Reload Zsh:
+```bash
+source ~/.zshrc
 ```
 
 ---
@@ -182,6 +192,13 @@ sudo reboot
 👉 [Certbot SSL Setup (Let's Encrypt)](https://github.com/mertdogan00/certbot-self-hosted-ssl)  
 
 ---
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to submit pull requests to improve this guide. 🎉🔥
+
+---
+
 ## 🪪 License 📜
 
 This project is licensed under the MIT License.  

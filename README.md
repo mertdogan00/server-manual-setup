@@ -11,7 +11,7 @@
 - [Install and Configure Oh My Zsh](#-install-and-configure-oh-my-zsh)
 - [Install Zsh Plugins](#-install-zsh-plugins)
 - [Install Fail2Ban](#-install-fail2ban)
-- [Install UFW Firewall and Configure Rules](#-install-ufw-firewall-and-configure-rules)
+- [Firewall Configuration (Choose UFW or firewalld)](#-firewall-configuration-choose-ufw-or-firewalld)
 - [Update Hostname](#-update-hostname)
 - [Optional: Configure Cloud-Init](#-optional-configure-cloud-init)
 - [Optional: Install Docker](#-optional-install-docker)
@@ -95,16 +95,81 @@ sudo fail2ban-client status
 
 ---
 
-## 🔥 Install UFW Firewall and Configure Rules
+## 🔥 Firewall Configuration (Choose UFW or firewalld)
 
+You can choose **UFW** (simple) or **firewalld** (advanced).  
+Both are supported on Debian. SSH port (22) is **open by default** on Debian systems.
+
+---
+
+### 🔸 Option 1: UFW (Recommended for Simplicity)
+
+#### Install UFW:
 ```bash
 sudo apt install -y ufw
+```
+
+#### Set Default Policies:
+```bash
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
-sudo ufw allow ssh
+```
+
+#### Open Essential Ports:
+```bash
+sudo ufw allow ssh comment 'Allow SSH for remote access'
+sudo ufw allow 2083/tcp comment 'Allow port 2083 for cPanel/Webmin SSL access'
+sudo ufw allow 80/tcp comment 'Allow HTTP traffic'
+sudo ufw allow 443/tcp comment 'Allow HTTPS traffic'
+
+```
+
+#### Enable UFW:
+```bash
 sudo ufw enable
+```
+
+#### Check UFW Status:
+```bash
 sudo ufw status verbose
 ```
+
+---
+
+### 🔸 Option 2: firewalld (Recommended for Advanced Users)
+
+#### Install firewalld:
+```bash
+sudo apt install -y firewalld
+sudo systemctl stop firewalld
+sudo systemctl disable firewalld
+```
+⚡ On Debian, firewalld may start automatically upon installation. Stop and disable it immediately to prevent accidental lockout.
+
+#### Open Essential Ports:
+```bash
+sudo firewall-cmd --permanent --add-service=ssh
+sudo firewall-cmd --permanent --add-port=2083/tcp
+sudo firewall-cmd --permanent --add-service=http
+sudo firewall-cmd --permanent --add-service=https
+```
+
+#### Apply Configuration and Start firewalld:
+```bash
+sudo firewall-cmd --reload
+sudo systemctl enable firewalld
+sudo systemctl start firewalld
+```
+
+#### Check firewalld Status:
+```bash
+sudo firewall-cmd --list-all
+```
+
+---
+
+### 🔒 Important Note:
+If you lock yourself out, most VPS providers offer a **Reset Firewall** option in their dashboard to regain access.
 
 ---
 
@@ -148,7 +213,6 @@ done
 ```
 
 Install Docker:
-
 ```bash
 sudo apt-get update
 sudo apt-get install -y ca-certificates curl

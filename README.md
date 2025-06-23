@@ -11,6 +11,7 @@
 - [Install and Configure Oh My Zsh](#-install-and-configure-oh-my-zsh)
 - [Install Zsh Plugins](#-install-zsh-plugins)
 - [Install Fail2Ban](#-install-fail2ban)
+- [Optional: Configure Fail2Ban for NGINX](#-optional-configure-fail2ban-for-nginx)
 - [Firewall Configuration (Choose UFW or firewalld)](#-firewall-configuration-choose-ufw-or-firewalld)
 - [Update Hostname](#-update-hostname)
 - [Optional: Configure Cloud-Init](#-optional-configure-cloud-init)
@@ -94,6 +95,65 @@ sudo fail2ban-client status
 ```
 
 ---
+
+## 🛡 Optional: Configure Fail2Ban for NGINX
+
+You can enhance your NGINX protection by creating custom jail configurations inside the `jail.d` directory.
+
+🗂️ Example file path: `/etc/fail2ban/jail.d/nginx.conf`
+
+Here’s a complete example configuration:
+
+```ini
+
+[nginx-botsearch]
+enabled  = true
+filter   = nginx-botsearch
+port     = http,https
+logpath  = /var/log/nginx/access.log
+           /var/log/nginx/cp-main_access_log
+           /var/log/nginx/cp-main_error_log
+maxretry = 10
+bantime  = 86400
+
+[nginx-http-auth]
+enabled  = true
+filter   = nginx-http-auth
+port     = http,https
+logpath  = /var/log/nginx/error.log
+           /var/log/nginx/cp-main_access_log
+           /var/log/nginx/cp-main_error_log
+maxretry = 3
+bantime  = 3600
+
+[nginx-bad-request]
+enabled  = true
+filter   = nginx-bad-request
+port     = http,https
+logpath  = /var/log/nginx/access.log
+           /var/log/nginx/cp-main_access_log
+           /var/log/nginx/cp-main_error_log
+maxretry = 5
+bantime  = 1800
+
+[nginx-limit-req]
+enabled  = true
+filter   = nginx-limit-req
+port     = http,https
+logpath  = /var/log/nginx/error.log
+           /var/log/nginx/cp-main_access_log
+           /var/log/nginx/cp-main_error_log
+maxretry = 10
+bantime  = 3600
+
+```
+
+✅ After saving the configuration, apply the changes with:
+```bash
+sudo systemctl restart fail2ban
+
+```
+
 
 ## 🔥 Firewall Configuration (Choose UFW or firewalld)
 
